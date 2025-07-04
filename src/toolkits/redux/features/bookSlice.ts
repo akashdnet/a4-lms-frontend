@@ -12,8 +12,8 @@ export const bookSlice = createApi({
       providesTags: ["Book"]
     }),
 
-    getBooks: builder.query<IBookMutationType, void>({
-      query: () => "/books",
+    getBooks: builder.query<IBookMutationType, {limit: number, page: number}>({
+      query: ({limit,page}) => `/books?limit=${limit}&page=${page}`,
       providesTags: ["Book"],
     }),
 
