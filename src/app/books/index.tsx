@@ -16,6 +16,7 @@ const page = parseInt(searchParams.get("page") || "1")
 
 useEffect(()=>{
   setPageValue(page)
+  setLimitValue(limit || limitValue)
 }, [page])
 
 
