@@ -61,30 +61,30 @@ const paramsHandler = (name: string, toggle: string) => {
 
 
 
-  const { data, isLoading, isError } = useGetBooksQuery({limit, page});
+  const { data, isLoading, isError, isFetching } = useGetBooksQuery({limit, page});
   const books: Book[] = Array.isArray(data?.data) ? data.data : [];
 
 
 
-  if (isLoading) return <p className="text-center w-full m-4">Loading...</p>;
+  // if (isLoading || isFetching) return <p className="text-center w-full m-4">Loading...</p>;
   if (isError)
     return <p className="text-center w-full m-4">Something went wrong...</p>;
 
 
- const pageInc = (data?.length ?? 0) < limit
+ const pageInc = (data?.length ?? 0) < limit || isLoading || isFetching
 
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Books</h1>
-      <DataTable columns={columns} data={books} />
+      {(isLoading || isFetching)?<p className="text-center w-full m-4">Loading...</p>:<DataTable columns={columns} data={books} />}
 
       <div className="flex justify-center mt-5">
-        <button disabled={page<2} className={`px-2  rounded  ${pageValue<2?"cursor-not-allowed bg-amber-100":"cursor-pointer bg-amber-400"}`} onClick={()=> paramsHandler("page", "des")}>{"<<"} </button>
+        <button disabled={page<2  || isFetching} className={`px-2  rounded  ${(pageValue<2 || isLoading || isFetching)?"cursor-not-allowed bg-amber-100":"cursor-pointer bg-amber-400"}`} onClick={()=> paramsHandler("page", "des")}>{"<<"} </button>
         <span className="mx-4">{pageValue}</span>
         <button
         disabled={pageInc}
-        className={`px-2  rounded  ${pageInc?"cursor-not-allowed bg-amber-100":"cursor-pointer bg-amber-400"}`} onClick={()=> paramsHandler("page", "inc")}>{">>"}</button>
+        className={`px-2  rounded  ${(pageInc)?"cursor-not-allowed bg-amber-100":"cursor-pointer bg-amber-400"}`} onClick={()=> paramsHandler("page", "inc")}>{">>"}</button>
       </div>
 
 
